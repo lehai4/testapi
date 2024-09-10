@@ -15,7 +15,7 @@ function App() {
     e.preventDefault();
     const data = { MaNV: maNV, MatKhau: matKhau };
     try {
-      const response = await fetch("http://192.168.220.1:3000/v1/auth/login", {
+      const response = await fetch("http://localhost:3000/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         mode: "cors",
@@ -38,7 +38,7 @@ function App() {
 
     try {
       const response = await fetch(
-        "http://192.168.220.1:3000/v1/auth/update-password",
+        "http://localhost:3000/v1/auth/update-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ function App() {
   };
 
   const handleProfile = async () => {
-    const res = await fetch("http://192.168.220.1:3000/v1/auth/profile", {
+    const res = await fetch("http://localhost:3000/v1/auth/profile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       mode: "cors",
@@ -68,7 +68,7 @@ function App() {
   };
 
   const LogOut = async () => {
-    const res = await fetch("http://192.168.220.1:3000/v1/auth/logout", {
+    const res = await fetch("http://localhost:3000/v1/auth/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
