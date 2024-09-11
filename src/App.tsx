@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const url = "http://192.168.221.203:3000";
   const [profile, setProfile] = useState<any>();
   const [matKhau, setMatKhau] = useState<string>("");
   const [matKhauNew, setMatKhauNew] = useState<string>("");
@@ -15,20 +16,31 @@ function App() {
     e.preventDefault();
     const data = { MaNV: maNV, MatKhau: matKhau };
     try {
-      const response = await fetch("http://localhost:3000/v1/auth/login", {
+      const response = await fetch(url + "/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        mode: "cors",
         body: JSON.stringify(data),
         credentials: "include",
       });
       const result = await response.json();
-      setMaNV("");
-      setMatKhau("");
+      if (result.success) {
+        setMatKhau("");
+        setMaNV("");
+      }
       setRes(result);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+  const handleProfile = async () => {
+    const res = await fetch(url + "/v1/auth/profile", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      mode: "cors",
+    });
+    const profile = await res.json();
+    setProfile(profile);
   };
 
   const handleUpdate = async (e: any) => {
@@ -37,38 +49,36 @@ function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "http://localhost:3000/v1/auth/update-password",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          mode: "cors",
-          body: JSON.stringify(data),
-          credentials: "include",
-        }
-      );
+      const response = await fetch(url + "/v1/auth/update-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        mode: "cors",
+        body: JSON.stringify(data),
+        credentials: "include",
+      });
       const result = await response.json();
-      setMatKhau("");
-      setMatKhauNew("");
+
+      if (result.success) {
+        setMatKhau("");
+        setMatKhauNew("");
+      }
       setRes(result);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-  const handleProfile = async () => {
-    const res = await fetch("http://localhost:3000/v1/auth/profile", {
-      method: "POST",
+  const getSession = async () => {
+    const res = await fetch(url + "/v1/auth/session", {
+      method: "GET",
       headers: { "Content-Type": "application/json" },
-      mode: "cors",
       credentials: "include",
+      mode: "cors",
     });
-    const profile = await res.json();
-    setProfile(profile);
+    const session = await res.json();
+    console.log(session);
   };
-
   const LogOut = async () => {
-    const res = await fetch("http://localhost:3000/v1/auth/logout", {
+    const res = await fetch(url + "/v1/auth/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -181,6 +191,7 @@ function App() {
       ) : (
         <h3 style={{ color: "red" }}>Lỗi profile:{profile?.message}</h3>
       )}
+      <button onClick={getSession}>GetSession</button>
     </div>
   );
 }
