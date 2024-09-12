@@ -2,14 +2,15 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const url = "http://192.168.221.203:3000";
+  // const url = "http://192.168.1.7:3000";
+  const url = "http://192.168.221.202:3000";
   const [profile, setProfile] = useState<any>();
   const [matKhau, setMatKhau] = useState<string>("");
   const [matKhauNew, setMatKhauNew] = useState<string>("");
   const [maNV, setMaNV] = useState<string>("");
-
+  const [session, setSession] = useState<any>();
   const [res, setRes] = useState<any>(null);
-
+  const [dataLogin, setDataLogin] = useState<any>();
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
 
   const handleLogin = async (e: any) => {
@@ -21,21 +22,28 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
         credentials: "include",
+        mode: "cors",
       });
       const result = await response.json();
       if (result.success) {
         setMatKhau("");
         setMaNV("");
+        setSession(result.data.session);
+        console.log(result.data.session);
       }
-      setRes(result);
+      setDataLogin(result);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
   const handleProfile = async () => {
     const res = await fetch(url + "/v1/auth/profile", {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer" + ` ${session?.sessionId}`,
+      },
       credentials: "include",
       mode: "cors",
     });
@@ -51,7 +59,10 @@ function App() {
     try {
       const response = await fetch(url + "/v1/auth/update-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer" + ` ${session?.sessionId}`,
+        },
         mode: "cors",
         body: JSON.stringify(data),
         credentials: "include",
@@ -67,20 +78,14 @@ function App() {
       console.error("Error fetching data:", error);
     }
   };
-  const getSession = async () => {
-    const res = await fetch(url + "/v1/auth/session", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      mode: "cors",
-    });
-    const session = await res.json();
-    console.log(session);
-  };
+
   const LogOut = async () => {
     const res = await fetch(url + "/v1/auth/logout", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer" + ` ${session?.sessionId}`,
+      },
       credentials: "include",
     });
     const result = await res.json();
@@ -145,11 +150,7 @@ function App() {
         <button style={{ margin: "20px 0" }} onClick={() => setIsUpdated(true)}>
           Update Password
         </button>
-        <button
-          className="logout"
-          style={{ margin: "20px 0" }}
-          onClick={handleProfile}
-        >
+        <button style={{ margin: "20px 0" }} onClick={handleProfile}>
           Profile
         </button>
         <button
@@ -162,6 +163,9 @@ function App() {
       </div>
 
       {res && <p>Thông báo: {res.message}</p>}
+      {dataLogin && (
+        <p style={{ color: "red" }}>Thông báo login: {dataLogin.message}</p>
+      )}
 
       {profile?.success === true ? (
         <>
@@ -191,7 +195,6 @@ function App() {
       ) : (
         <h3 style={{ color: "red" }}>Lỗi profile:{profile?.message}</h3>
       )}
-      <button onClick={getSession}>GetSession</button>
     </div>
   );
 }
