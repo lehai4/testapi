@@ -21,7 +21,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
         credentials: "include",
-        mode: "cors",
+        mode: "no-cors",
       });
       const result = await response.json();
       if (result.success) {
@@ -45,7 +45,7 @@ function App() {
         Authorization: "Bearer" + ` ${session?.sessionId}`,
       },
       credentials: "include",
-      mode: "cors",
+      mode: "no-cors",
     });
     const profile = await res.json();
     setProfile(profile);
@@ -63,7 +63,7 @@ function App() {
           "Content-Type": "application/json",
           Authorization: "Bearer" + ` ${session?.sessionId}`,
         },
-        mode: "cors",
+        mode: "no-cors",
         body: JSON.stringify(data),
         credentials: "include",
       });
@@ -87,6 +87,7 @@ function App() {
         Authorization: "Bearer" + ` ${session?.sessionId}`,
       },
       credentials: "include",
+      mode: "no-cors",
     });
     const result = await res.json();
     setRes(result);
