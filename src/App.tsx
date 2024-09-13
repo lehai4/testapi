@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
   // const url = "http://192.168.1.7:3000";
-  const url = "http://192.168.221.202:3000";
+  const url = "http://192.168.221.203:3000";
   const [profile, setProfile] = useState<any>();
   const [matKhau, setMatKhau] = useState<string>("");
   const [matKhauNew, setMatKhauNew] = useState<string>("");
@@ -38,6 +38,7 @@ function App() {
   };
 
   const handleProfile = async () => {
+    console.log("session", session);
     const res = await fetch(url + "/v1/auth/profile", {
       method: "GET",
       headers: {
