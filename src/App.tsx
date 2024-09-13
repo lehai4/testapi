@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const url = "http://192.168.221.203:3000";
+  const url = "https://test.vietlonghung.com.vn";
   const [profile, setProfile] = useState<any>();
   const [matKhau, setMatKhau] = useState<string>("");
   const [matKhauNew, setMatKhauNew] = useState<string>("");
