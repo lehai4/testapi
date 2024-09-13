@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const url = "https://test.vietlonghung.com.vn";
+  const url = "http://192.168.221.203:3000";
   const [profile, setProfile] = useState<any>();
   const [matKhau, setMatKhau] = useState<string>("");
   const [matKhauNew, setMatKhauNew] = useState<string>("");
@@ -15,13 +15,13 @@ function App() {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     const data = { MaNV: maNV, MatKhau: matKhau };
+    console.log("data", data);
     try {
       const response = await fetch(url + "/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
         credentials: "include",
-        mode: "no-cors",
       });
       const result = await response.json();
       if (result.success) {
@@ -45,7 +45,6 @@ function App() {
         Authorization: "Bearer" + ` ${session?.sessionId}`,
       },
       credentials: "include",
-      mode: "no-cors",
     });
     const profile = await res.json();
     setProfile(profile);
@@ -63,7 +62,6 @@ function App() {
           "Content-Type": "application/json",
           Authorization: "Bearer" + ` ${session?.sessionId}`,
         },
-        mode: "no-cors",
         body: JSON.stringify(data),
         credentials: "include",
       });
@@ -87,7 +85,6 @@ function App() {
         Authorization: "Bearer" + ` ${session?.sessionId}`,
       },
       credentials: "include",
-      mode: "no-cors",
     });
     const result = await res.json();
     setRes(result);
