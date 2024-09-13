@@ -3,7 +3,7 @@ import "./App.css";
 
 function App() {
   // const url = "http://192.168.1.7:3000";
-  const url = "http://192.168.221.203:3000";
+  const url = "http://171.244.39.87:3000";
   const [profile, setProfile] = useState<any>();
   const [matKhau, setMatKhau] = useState<string>("");
   const [matKhauNew, setMatKhauNew] = useState<string>("");
